@@ -1,3 +1,5 @@
+import json
+
 expenses = []
 
 
@@ -25,6 +27,10 @@ def add_expense():
         }
 
         expenses.append(expense)
+
+        with open("expenses.json", "w") as file:
+            json.dump(expenses, file, indent=4)
+
         print("Expense added successfully.")
 
     except ValueError as error:
@@ -50,7 +56,9 @@ def view_expenses():
 
 
 def calculate_total():
-    total_expense = sum(expense["amount"] for expense in expenses)
+    total_expense = sum(
+        expense["amount"] for expense in expenses
+    )
 
     return f"The total amount for these expenses is: £{total_expense:.2f}"
 
@@ -81,43 +89,11 @@ def delete_expense():
     for expense in expenses:
         if expense["name"] == name:
             expenses.remove(expense)
+
+            with open("expenses.json", "w") as file:
+                json.dump(expenses, file, indent=4)
+
             print("Expense deleted successfully.")
             return
 
     print("Expense not found.")
-
-
-while True:
-    print()
-    print("1. Add expense")
-    print("2. View expenses")
-    print("3. Calculate total")
-    print("4. Show category expenses")
-    print("5. Delete expense")
-    print("6. Exit")
-
-    choice = input("Choose an option: ")
-
-    if choice == "1":
-        add_expense()
-
-    elif choice == "2":
-        view_expenses()
-
-    elif choice == "3":
-        print(calculate_total())
-
-    elif choice == "4":
-        show_category()
-
-    elif choice == "5":
-        delete_expense()
-
-    elif choice == "6":
-        print("Finish")
-        break
-
-    else:
-        print("Error: Invalid menu option. Please choose 1 to 6.")
-
-
